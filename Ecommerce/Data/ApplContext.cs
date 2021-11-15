@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Data.Entities;
+using Ecommerce.Data.Entities.Product;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,54 @@ namespace Ecommerce.Data
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
             });
+
+
+            
+
+
+            builder.Entity<CatalogEntity>()
+                .HasMany(g => g. Categories)
+                .WithOne(tr => tr.Catalog).IsRequired().HasForeignKey(s => s.CatalogId);
+
+
+            builder.Entity<CategoryEntity>()
+                 .HasMany(x => x.Children);
+
+
+            builder.Entity<CategoryEntity>()
+                 .HasOne(x => x.Parent);
+
+
+            //builder.Entity<ProductEntity>()
+            //    .HasMany<ProductAttribute>(s => s.AttributeValues)
+            //    .WithMany(c => c.Products)
+
+
+            builder.Entity<ProductAttributeValue>()
+            .HasKey(t => new { t.AttributeId, t.ProductId });
+
+            builder.Entity<ProductAttributeValue>()
+           .HasOne(pt => pt.Product)
+           .WithMany(p => p.AttributeValues)
+           .HasForeignKey(pt => pt.ProductId);
+
+            builder.Entity<ProductAttributeValue>()
+                .HasOne(pt => pt.Attribute)
+                .WithMany(t => t.Products)
+                .HasForeignKey(pt => pt.AttributeId);
+
+
         }
+
+        public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<BrandEntity> Brands { get; set; }
+        public DbSet<CatalogEntity> Catalogs { get; set; }
+        public DbSet<CategoryEntity> Categories { get; set; }
+        public DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public DbSet<ProductAttributeGroup> ProductAttributeGroups { get; set; }
+        public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }
+
+
+
     }
 }

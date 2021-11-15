@@ -3,14 +3,16 @@ using System;
 using Ecommerce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20211115145018_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,21 +118,6 @@ namespace Ecommerce.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Ecommerce.Data.Entities.Product.ProductAttributeValue", b =>
-                {
-                    b.Property<long>("AttributeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("AttributeId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductAttributeValues");
-                });
-
             modelBuilder.Entity("Ecommerce.Data.Entities.ProductAttribute", b =>
                 {
                     b.Property<long>("Id")
@@ -183,6 +170,41 @@ namespace Ecommerce.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("ProductAttributeGroups");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Entities.ProductAttributeValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("AttributeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductAttributeValues");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Entities.ProductEntity", b =>
@@ -444,25 +466,6 @@ namespace Ecommerce.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Ecommerce.Data.Entities.Product.ProductAttributeValue", b =>
-                {
-                    b.HasOne("Ecommerce.Data.Entities.ProductAttribute", "Attribute")
-                        .WithMany("Products")
-                        .HasForeignKey("AttributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ecommerce.Data.Entities.ProductEntity", "Product")
-                        .WithMany("AttributeValues")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Attribute");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Ecommerce.Data.Entities.ProductAttribute", b =>
                 {
                     b.HasOne("Ecommerce.Data.Entities.ProductAttributeGroup", "Group")
@@ -481,6 +484,23 @@ namespace Ecommerce.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Entities.ProductAttributeValue", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Entities.ProductAttribute", "Attribute")
+                        .WithMany()
+                        .HasForeignKey("AttributeId");
+
+                    b.HasOne("Ecommerce.Data.Entities.ProductEntity", "Product")
+                        .WithMany("AttributeValues")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Attribute");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Entities.ProductEntity", b =>
@@ -561,11 +581,6 @@ namespace Ecommerce.Migrations
             modelBuilder.Entity("Ecommerce.Data.Entities.CategoryEntity", b =>
                 {
                     b.Navigation("Children");
-                });
-
-            modelBuilder.Entity("Ecommerce.Data.Entities.ProductAttribute", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Entities.ProductAttributeGroup", b =>

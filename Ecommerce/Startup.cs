@@ -1,5 +1,6 @@
 using Ecommerce.Data;
 using Ecommerce.Data.Entities;
+using Ecommerce.Mapper;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -22,14 +23,18 @@ namespace Ecommerce
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public Startup(IConfiguration configuration) => (Configuration) = (configuration);        
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-        
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -53,6 +58,8 @@ namespace Ecommerce
                 .AddEntityFrameworkStores<ApplContext>()
                 .AddDefaultTokenProviders();
 
+
+            services.AddAutoMapper(typeof(AppMapProfile));
 
 
             services.AddSwaggerGen(c =>
@@ -106,6 +113,11 @@ namespace Ecommerce
             services.AddCors();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<ICatalogService, CatalogService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
