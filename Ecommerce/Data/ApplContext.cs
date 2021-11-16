@@ -51,6 +51,8 @@ namespace Ecommerce.Data
                  .HasOne(x => x.Parent);
 
 
+            //builder.Entity<ProductAttribute>().HasMany(x=>x.Values).WithOne(c=>c.)
+
             //builder.Entity<ProductEntity>()
             //    .HasMany<ProductAttribute>(s => s.AttributeValues)
             //    .WithMany(c => c.Products)
@@ -79,7 +81,6 @@ namespace Ecommerce.Data
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeGroup> ProductAttributeGroups { get; set; }
         public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }
-
 
 
     }

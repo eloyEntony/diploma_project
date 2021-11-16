@@ -28,9 +28,13 @@ namespace Ecommerce.Data.Entities
         public long? CatalogId { get; set; }
         public virtual CatalogEntity Catalog { get; set; }
 
+        public IList<ProductEntity> Products { get; protected set; }
+
+
         public CategoryEntity()
         {
             Children = new List<CategoryEntity>();
+            Products = new List<ProductEntity>();
         }
     }
 }

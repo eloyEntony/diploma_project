@@ -284,6 +284,7 @@ namespace Ecommerce.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     GroupId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false)
@@ -303,24 +304,18 @@ namespace Ecommerce.Migrations
                 name: "ProductAttributeValues",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AttributeId = table.Column<long>(type: "INTEGER", nullable: true),
                     ProductId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false)
+                    AttributeId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductAttributeValues", x => x.Id);
+                    table.PrimaryKey("PK_ProductAttributeValues", x => new { x.AttributeId, x.ProductId });
                     table.ForeignKey(
                         name: "FK_ProductAttributeValues_ProductAttributes_AttributeId",
                         column: x => x.AttributeId,
                         principalTable: "ProductAttributes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductAttributeValues_Products_ProductId",
                         column: x => x.ProductId,
@@ -385,11 +380,6 @@ namespace Ecommerce.Migrations
                 name: "IX_ProductAttributes_GroupId",
                 table: "ProductAttributes",
                 column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductAttributeValues_AttributeId",
-                table: "ProductAttributeValues",
-                column: "AttributeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductAttributeValues_ProductId",

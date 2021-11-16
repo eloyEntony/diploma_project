@@ -16,7 +16,7 @@ namespace Ecommerce.Data
         [Key]
         public T Id { get; set; }
         public bool IsDeleted { get; set; }
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.Now;
 
         [Required, StringLength(255)]
         public string Name { get; set; }

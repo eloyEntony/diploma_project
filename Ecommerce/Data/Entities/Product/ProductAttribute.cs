@@ -15,5 +15,7 @@ namespace Ecommerce.Data.Entities
 
         public virtual IList<ProductAttributeValue> Products { get; set; }
 
+        public string Value { get; set; }
+
     }
 }

@@ -1,5 +1,6 @@
 using Ecommerce.Data;
 using Ecommerce.Data.Entities;
+using Ecommerce.Helpers;
 using Ecommerce.Mapper;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -116,6 +117,8 @@ namespace Ecommerce
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAttributeService, AttributeService>();
 
 
         }
@@ -160,6 +163,7 @@ namespace Ecommerce
             });
 
             //app.SeedData();
+            //DatabaseSeeder.SeedData(app.ApplicationServices, env, Configuration);
         }
     }
 }
