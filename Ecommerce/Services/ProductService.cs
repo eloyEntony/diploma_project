@@ -33,20 +33,19 @@ namespace Ecommerce.Services
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
-            var tmp = _context.Products.First(x=>x.Name == model.Name);
+            var tmpid = _context.Products.Max(x=>x.Id); // get last added item
+            var tmp = _context.Products.Find(tmpid);
 
             foreach (var item in model.Attributes)
             {
-                _context.ProductAttributeValues.Add(new ProductAttributeValue() { AttributeId = item.Id, ProductId = tmp.Id });
+                var a = _context.ProductAttributes.FirstOrDefault(x => x.Id == item.Id);
+                var res = _context.ProductAttributeValues.Add(new ProductAttributeValue() { Attribute = a, Product = tmp });
                 _context.SaveChanges();
-            }
-            foreach (var item in product.AttributeValues)
-            {
-                //var attribut = _context.ProductAttributes.FirstOrDefault(x => x.Id == item.AttributeId);
 
-                _context.ProductAttributeValues.Add(new ProductAttributeValue() { AttributeId = item.AttributeId, ProductId = product.Id });
-            }
+                tmp.AttributeValues.Add(res.Entity);
 
+                _context.SaveChanges();
+            }          
             return new ResultResponse() { IsSuccessful = true, Message = "Product is added" };
         }
 
@@ -64,20 +63,53 @@ namespace Ecommerce.Services
 
         public async Task<IList<ProductVM>> GetAllAsync()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products.Include(x => x.AttributeValues).ToListAsync();
             return _mapper.Map<IList<ProductEntity>, IList<ProductVM>>(products);
         }
 
         public async Task<ProductVM> GetById(long id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
-            return _mapper.Map<ProductVM>(product);
+            var product = await _context.Products.Include(x=>x.AttributeValues).FirstOrDefaultAsync(x => x.Id == id);
+            
+            var vm = _mapper.Map<ProductEntity, ProductVM>(product);
+
+            var t = _context.ProductAttributeValues.Include(x=>x.Attribute).Where(x => x.ProductId == product.Id).ToList();
+            vm.Attributes = new List<AttributeSlimVM>();
+            foreach (var item in t)
+            {
+                var x = item.Attribute;
+                var y = _mapper.Map<AttributeSlimVM>(x);
+                vm.Attributes.Add(y);
+            }
+            return vm;
         }
 
         public async Task<ResultResponse> UpdateAsync(ProductVM model)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.Id);
+            var product = await _context.Products.Include(x=>x.AttributeValues).FirstOrDefaultAsync(x => x.Id == model.Id);
             _mapper.Map<ProductVM, ProductEntity>(model, product);
+
+            var productAttributeList = _context.ProductAttributeValues.ToList();
+            int i = 0;
+            foreach (var item in model.Attributes)
+            {
+                var a = _context.ProductAttributes.FirstOrDefault(x => x.Id == item.Id);
+
+                var tmp = new ProductAttributeValue() { Attribute = a, Product = product, ProductId= product.Id, AttributeId= a.Id };
+
+                //if (!productAttributeList.Contains(tmp))                
+                //    continue;
+                
+                if ((product.AttributeValues[i].ProductId == tmp.ProductId) &&(product.AttributeValues[i].AttributeId == tmp.AttributeId))
+                    continue;
+
+                i++;
+                var res = _context.ProductAttributeValues.Add(tmp);
+                _context.SaveChanges();
+                product.AttributeValues.Add(res.Entity);
+
+            }
+
             _context.Products.Update(product);
             await _context.SaveChangesAsync();
             return new ResultResponse() { IsSuccessful = true, Message = "Product is updated" };

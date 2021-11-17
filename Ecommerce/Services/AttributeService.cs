@@ -72,7 +72,7 @@ namespace Ecommerce.Services
 
         public async Task<AttributeGroupVM> GetAttributeGroupById(long id)
         {
-            var attributeGroup = await _context.ProductAttributeGroups.FirstOrDefaultAsync(x => x.Id == id);
+            var attributeGroup = await _context.ProductAttributeGroups.Include(x=>x.Attributes).FirstOrDefaultAsync(x => x.Id == id);
             return _mapper.Map<ProductAttributeGroup, AttributeGroupVM>(attributeGroup);
         }
 
