@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import { TabMenu } from 'primereact/tabmenu';
 import { Button } from 'primereact/button';
 
+
+
 const Header =()=>{
-    const [activeIndex, setActiveIndex] = useState(3);
 
     const items = [
         {label: 'Home', icon: 'pi pi-fw pi-home'},
