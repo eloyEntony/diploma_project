@@ -32,7 +32,7 @@ namespace Ecommerce.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginVM model)
         {
             var response = await _userService.LoginAsync(model);

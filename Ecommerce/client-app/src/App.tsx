@@ -12,18 +12,30 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
+import LoginPage from './components/auth/login';
+import RegisterPage from './components/auth/register';
+import HomePage from './components/home';
+import ProductsList from './components/products';
 
 function App() {
 
   return (  
         <BrowserRouter>
             <Routes>
+              
+                
               <Route path="/admin" element={<AdminLayout/>} >
                 <Route path="products" element={<Products/>} />
                 <Route path="" element={<AdminHome/>} />
                 <Route path="users" element={<Users/>} />
-              </Route>             
-              <Route path="/" element={<DefaultLayout/>}/>
+              </Route>  
+                         
+              <Route path="/" element={<DefaultLayout/>}>                
+                <Route path="/" element={<HomePage/>}/ >
+                <Route path="products" element={<ProductsList/>}/ >
+                <Route path="/login" element={<LoginPage/>}/ >
+                <Route path="/register" element={<RegisterPage/>}/ >
+              </Route>
             </Routes>
         </BrowserRouter>
 
