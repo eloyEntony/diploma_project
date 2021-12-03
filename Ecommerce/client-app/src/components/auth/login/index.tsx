@@ -18,7 +18,8 @@ const LoginPage: FC = () => {
     const handleLogin =(e: React.FormEvent)=>{
         e.preventDefault()
         loginUser(user);
-
+        console.log(user);
+        
     }
 
     const handleChange : React.ChangeEventHandler<HTMLInputElement>=(e)=>{

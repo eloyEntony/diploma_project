@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { TabMenu } from 'primereact/tabmenu';
 import { Button } from 'primereact/button';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import {Navbar, Nav, Container} from 'react-bootstrap'
 import {useActions} from '../../../hooks/useActions';
@@ -9,7 +9,7 @@ import {useActions} from '../../../hooks/useActions';
 
 const Header =()=>{
 
-    const { isAuth, user } = useTypedSelector((redux) => redux.auth);
+    const { isAuth, user, isAdmin } = useTypedSelector((redux) => redux.auth);
     const {logoutUser} = useActions();
 
 
@@ -18,14 +18,19 @@ const Header =()=>{
         logoutUser();
     }
 
+    if(isAdmin)
+        return <Navigate replace to="/admin/home" />
+
     return (
-             <Navbar bg="dark" variant="dark">
+             <Navbar bg="dark" variant="dark">                
                 <Container>
                     <Navbar.Brand href="#home">Eccomerce</Navbar.Brand>
                         <Nav className="me-auto">
                             <Link className="nav-link" to="/">Home</Link>
                             <Link className="nav-link" to="/products">Products</Link>
                         </Nav>
+                        
+
                         {isAuth ? ( 
                             <Nav className="justify-content-end">
                              <ul className="navbar-nav">

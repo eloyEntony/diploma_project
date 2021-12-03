@@ -44,14 +44,17 @@ namespace Ecommerce.Services
 
                 foreach (var userRole in userRoles)
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+
+                // authentication successful so generate jwt token
+                var token = _jwtTokenService.CreateToken(user);
+                return new AuthResponse(token);
             }
 
             // return null if user not found
-            if (user == null) return null;
+            //if (user == null)
+                return null;
 
-            // authentication successful so generate jwt token
-            var token = _jwtTokenService.CreateToken(user);
-            return new AuthResponse(token);
+            
         }
 
         public async Task<AuthResponse> RegisterAsync(RegisterVM model)

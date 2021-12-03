@@ -21,8 +21,8 @@ export interface IUser {
     email?: string,
     username?:string | null,
     image?: string,
-    roles?: Array<string>,
-    token?: null | string
+    token?: null | string,
+    isAdmin?: boolean
 }
 
 export interface AuthState {
@@ -30,7 +30,9 @@ export interface AuthState {
     isAuth: boolean,
     loading: boolean,
     error: null|string,
-    token: null | string
+    token: null | string,
+    isAdmin?: boolean
+
 }
 
 

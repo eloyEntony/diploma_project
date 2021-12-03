@@ -3,14 +3,14 @@ import { AuthAction, AuthActionTypes, AuthState } from '../../types/auth';
 const inialState : AuthState = {
     //user: null,
     user: {
-        email: "test@gmail.com",
-        image: "https://wellnesso.ru/wp-content/uploads/2019/02/sharliz-teron-blondinka.jpg"
+        email: "",
+        image: ""
     },
-    //isAuth: false,
-    isAuth: true,
+    isAuth: false,
     loading: false,
     error: null,
-    token: null
+    token: null,
+    isAdmin: false,
 }
 
 export const authReducer = (state=inialState, action: AuthAction) : AuthState => {
@@ -22,14 +22,17 @@ export const authReducer = (state=inialState, action: AuthAction) : AuthState =>
             }
         }
         case AuthActionTypes.LOGIN_AUTH_SUCCESS: {
-            return {
-                ...state, 
-                loading: false, 
-                isAuth: true, 
-                user: action.payload
-            };
+                return {
+                    ...state, 
+                    loading: false, 
+                    isAuth: true, 
+                    isAdmin: action.payload.isAdmin,
+                    user: action.payload
+                };
         }
         case AuthActionTypes.LOGIN_AUTH_ERROR: {
+            console.log(action.payload);
+            
             return {
                 ...state, 
                 loading: false, 
@@ -38,9 +41,13 @@ export const authReducer = (state=inialState, action: AuthAction) : AuthState =>
         }
         case AuthActionTypes.LOGOUT:{
             return {
-                ...state,
+                //...state,
                 loading: false,
-                isAuth: false
+                isAuth: false,
+                token: null,
+                isAdmin: false,
+                error: null,
+                user:{email: '', image:''}
             }
         }
         default:
