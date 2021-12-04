@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { useActions } from '../../../hooks/useActions';
 import { ILoginVM } from '../../../types/auth';
-import { Button, Form } from 'react-bootstrap'
-import { useFormik, FormikHelpers, Formik } from 'formik';
+import { Button, Form  } from 'react-bootstrap'
+import { useFormik, FormikHelpers, Formik, Field, Form as F } from 'formik';
 import { loginValidationShema } from './validationSchema'
 
 const LoginPage: FC = () => {
@@ -13,8 +13,13 @@ const LoginPage: FC = () => {
             password: '',
         },
         validationSchema: loginValidationShema,
-        onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit (values: ILoginVM, { setSubmitting, setErrors }: FormikHelpers<ILoginVM>) {
+            //alert(JSON.stringify(values, null, 2));
+            setTimeout(() => {
+                setSubmitting(false);
+            }, 500);
+            console.log("values", values);
+            //loginUser(values);
         },
     });
 
@@ -25,8 +30,8 @@ const LoginPage: FC = () => {
         setTimeout(() => {
             setSubmitting(false);
         }, 500);
-        // console.log("values", values);
-        loginUser(values);
+         console.log("values", values);
+        //loginUser(values);
     };
 
     return (
@@ -39,6 +44,7 @@ const LoginPage: FC = () => {
                         validationSchema={loginValidationShema}
                         // validationSchema={formik.validationSchema}
                         onSubmit={handlerSubmit}
+                        // onSubmit={formik.handleSubmit}
                         initialValues={formik.initialValues}
                     >
                         {({
@@ -50,48 +56,50 @@ const LoginPage: FC = () => {
                             isValid,
                             errors,
                         }) => (
-                            <Form onSubmit={handleSubmit} >
+                            <F >
+                        {/* //  <Form onSubmit={formik.handleSubmit} >   */}
                                 {/* <Row className="mb-3"> */}
                                 {/* <Form.Group as={Col} md="4" controlId="email"> */}
-                                <Form.Group controlId="email">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control
-                                        autoFocus
+                                <label htmlFor="email">Email</label>
+                                    <Field
+                                    id="email"
+                                        className="form-control"
+                                        //autoFocus
                                         type="text"
                                         name="email"
                                         placeholder="Email"
-                                        className="SignUpFormControls"
-                                        value={values.email}
-                                        onChange={handleChange}
-                                        isValid={touched.email && !errors.email}
-                                        isInvalid={!!errors.email}
+                                        // className="SignUpFormControls"
+                                        //value={values.email}
+                                        // onChange={handleChange}
+                                        // isValid={touched.email && !errors.email}
+                                        // isInvalid={!!errors.email}
                                     />
                                     {errors.email && touched.email ? (
-                                        <Form.Control.Feedback className="FeedBack" type="invalid">{errors.email}</Form.Control.Feedback>
+                                        // <Form.Control.Feedback className="FeedBack" type="invalid">{errors.email}</Form.Control.Feedback>
+                                        <div className="text-danger">{errors.email}</div>
                                     ) : null}
 
-                                </Form.Group>
                                 {/* <Form.Group as={Col} md="4" controlId="password"> */}
-                                <Form.Group controlId="password">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control
+                                <label htmlFor="password">Password</label>
+                                    <Field
+                                        id="password"
+                                        className="form-control"
                                         type="password"
                                         name="password"
                                         placeholder="Password"
-                                        className="SignUpFormControls"
-                                        value={values.password}
-                                        onChange={handleChange}
-                                        isValid={touched.password && !errors.password}
-                                        isInvalid={!!errors.password}
+                                        // className="SignUpFormControls"
+                                        //value={values.password}
+                                        // onChange={handleChange}
+                                        // isValid={touched.password && !errors.password}
+                                        // isInvalid={!!errors.password}
                                     />
                                     {errors.password && touched.password ? (
-                                        <Form.Control.Feedback className="FeedBack" type="invalid">{errors.password}</Form.Control.Feedback>
+                                        // <Form.Control.Feedback className="FeedBack" type="invalid">{errors.password}</Form.Control.Feedback>
+                                        <div className="text-danger">{errors.password}</div>
                                     ) : null}
-
-                                </Form.Group>
                                 {/* </Row>             */}
                                 <Button type="submit" className="SignUpButton mt-3">Login</Button>
-                            </Form>)}
+                            </F>)}
                     </Formik>
                 </div>
             </div>
