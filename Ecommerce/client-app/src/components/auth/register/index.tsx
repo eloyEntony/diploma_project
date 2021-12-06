@@ -1,14 +1,16 @@
-import React, { useState, FC } from 'react'
+import React, { useState, FC, useEffect } from 'react'
 import { IRegisterVM } from '../../../types/auth';
 import { useActions } from '../../../hooks/useActions';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useFormik, FormikHelpers, Formik } from 'formik';
 import { registerValidationShema } from './validaionSchema';
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+
 
 const RegisterPage: FC = () => {
     //https://formik.org/docs/guides/typescript
-    const { registerUser } = useActions();
+    const { registerUser, cleanUserError } = useActions();
 
     const [enableValidation, setEnableValidation] = useState(false)
 
@@ -22,16 +24,35 @@ const RegisterPage: FC = () => {
         validationSchema: registerValidationShema,
         validateOnChange: enableValidation,
         validateOnBlur: enableValidation,
+        
         onSubmit(values: IRegisterVM, { setSubmitting, setErrors }: FormikHelpers<IRegisterVM>) {
-            setEnableValidation(true)
+            setEnableValidation(true)            
             setTimeout(() => {
                 setSubmitting(false);
             }, 500);
             console.log("values", values);
-            //registerUser(values);
+            registerUser(values);
         },
     });
    
+    const { error } = useTypedSelector((redux) => redux.auth);
+    
+    useEffect(() => {
+        cleanUserError()
+    }, [error]);
+
+    if(error?.errors!= null){
+        //console.log(error.errors.Email);
+        let array = error.errors.Email
+        array.map((e: any)=>{
+            console.log(e);   
+            //formik.errors.email = e       
+            //formik.values.email = ''      
+        })
+        
+       
+    }
+
     return (
         <div className="container">
             <div className="row">
@@ -88,6 +109,7 @@ const RegisterPage: FC = () => {
                                     // placeholder="Email"
                                     value={formik.values.email}
                                     onChange={formik.handleChange}
+                                    
                                     name="email"
                                     isInvalid={!!formik.errors.email}
                                 />

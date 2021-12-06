@@ -1,3 +1,4 @@
+import { object } from 'yup';
 import { AuthAction, AuthActionTypes, AuthState } from '../../types/auth';
 
 const inialState : AuthState = {
@@ -31,7 +32,7 @@ export const authReducer = (state=inialState, action: AuthAction) : AuthState =>
                 };
         }
         case AuthActionTypes.LOGIN_AUTH_ERROR: {
-            console.log(action.payload);
+           // console.log(action.payload);
             
             return {
                 ...state, 
@@ -48,6 +49,12 @@ export const authReducer = (state=inialState, action: AuthAction) : AuthState =>
                 isAdmin: false,
                 error: null,
                 user:{email: '', image:''}
+            }
+        }
+        case AuthActionTypes.CLEAN_ERROR:{
+            return{
+                ...state, 
+                error: null
             }
         }
         default:

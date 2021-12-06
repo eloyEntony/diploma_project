@@ -16,13 +16,16 @@ import LoginPage from './components/auth/login';
 import RegisterPage from './components/auth/register';
 import HomePage from './components/home';
 import ProductsList from './components/products';
+import { FormikFormDemo } from './components/auth/register/test';
+import LoginPage2 from './components/auth/login/index copy';
 
 function App() {
 
   return (  
         <BrowserRouter>
             <Routes>
-              
+              <Route path="/test" element={<FormikFormDemo/>}/>
+              <Route path="/test2" element={<LoginPage2/>}/>
                 
               <Route path="/admin" element={<AdminLayout/>} >
                 <Route path="products" element={<Products/>} />

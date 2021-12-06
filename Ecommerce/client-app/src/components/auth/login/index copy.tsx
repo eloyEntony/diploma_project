@@ -2,10 +2,10 @@ import React, { FC } from 'react'
 import { useActions } from '../../../hooks/useActions';
 import { ILoginVM } from '../../../types/auth';
 import { Button, Form  } from 'react-bootstrap'
-import { useFormik, FormikHelpers, Formik, Field, Form as F } from 'formik';
+import { useFormik, FormikHelpers, Formik, Field, Form as F, FormikProvider } from 'formik';
 import { loginValidationShema } from './validationSchema'
 
-const LoginPage: FC = () => {
+const LoginPage2: FC = () => {
 
     const formik = useFormik({
         initialValues: {
@@ -25,14 +25,7 @@ const LoginPage: FC = () => {
 
     const { loginUser } = useActions();
 
-    const handlerSubmit = (values: ILoginVM, { setSubmitting, setErrors }: FormikHelpers<ILoginVM>
-    ) => {
-        setTimeout(() => {
-            setSubmitting(false);
-        }, 500);
-         console.log("values", values);
-        loginUser(values);
-    };
+    const { errors, touched, handleChange, handleSubmit, setFieldError } = formik;
 
     return (
         <div className="container">
@@ -40,22 +33,8 @@ const LoginPage: FC = () => {
                 <div className="col-md-6 offset-md-3">
                     <h1 className="text-center">LOGIN</h1>
 
-                    <Formik
-                        validationSchema={loginValidationShema}
-                        // validationSchema={formik.validationSchema}
-                        onSubmit={handlerSubmit}
-                        // onSubmit={formik.handleSubmit}
-                        initialValues={formik.initialValues}
-                    >
-                        {({
-                            handleSubmit,
-                            handleChange,
-                            handleBlur,
-                            values,
-                            touched,
-                            isValid,
-                            errors,
-                        }) => (
+                    <FormikProvider value={formik}>
+
                             <F >
                         {/* //  <Form onSubmit={formik.handleSubmit} >   */}
                                 {/* <Row className="mb-3"> */}
@@ -99,12 +78,12 @@ const LoginPage: FC = () => {
                                     ) : null}
                                 {/* </Row>             */}
                                 <Button type="submit" className="SignUpButton mt-3">Login</Button>
-                            </F>)}
-                    </Formik>
+                            </F>
+                            </FormikProvider>
                 </div>
             </div>
         </div>
     )
 }
 
-export default LoginPage;
+export default LoginPage2;

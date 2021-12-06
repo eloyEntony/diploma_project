@@ -76,8 +76,10 @@ export const registerUser = (data: IRegisterVM) => {
             dispatch({type: AuthActionTypes.LOGIN_AUTH_SUCCESS, payload: response.data});
             
         }
-        catch(error) {
-            dispatch({type: AuthActionTypes.LOGIN_AUTH_ERROR, payload: "Error"});
+        catch(error:any) {
+            //console.log(error.response?.data.errors);
+            
+            dispatch({type: AuthActionTypes.LOGIN_AUTH_ERROR, payload: error.response?.data});
         }
     }
 }
@@ -88,6 +90,18 @@ export const logoutUser = ()=>{
             setAuthToken('')
             dispatch({type:AuthActionTypes.LOGOUT});
             localStorage.removeItem('token')
+        }
+        catch(err){
+
+        }
+        
+    }
+}
+
+export const cleanUserError = ()=>{
+    return async(dispatch : Dispatch<AuthAction>)=>{
+        try{            
+            dispatch({type:AuthActionTypes.CLEAN_ERROR});            
         }
         catch(err){
 

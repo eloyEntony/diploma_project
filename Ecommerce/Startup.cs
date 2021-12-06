@@ -3,6 +3,7 @@ using Ecommerce.Data.Entities;
 using Ecommerce.Helpers;
 using Ecommerce.Mapper;
 using Ecommerce.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -120,6 +121,9 @@ namespace Ecommerce
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAttributeService, AttributeService>();
 
+
+            services.AddFluentValidation(x =>
+                x.RegisterValidatorsFromAssemblyContaining<Startup>());
 
         }
 

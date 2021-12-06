@@ -2,7 +2,8 @@ export enum AuthActionTypes {
     LOGIN_AUTH = "LOGIN_AUTH",
     LOGIN_AUTH_SUCCESS = "LOGIN_AUTH_SUCCESS",
     LOGIN_AUTH_ERROR = "LOGIN_AUTH_ERROR",
-    LOGOUT = "LOGOUT"
+    LOGOUT = "LOGOUT",
+    CLEAN_ERROR="CLEAN_ERROR"
 }
 
 export interface ILoginVM{
@@ -29,7 +30,7 @@ export interface AuthState {
     user: null|IUser,
     isAuth: boolean,
     loading: boolean,
-    error: null|string,
+    error: any | null,
     token: null | string,
     isAdmin?: boolean
 
@@ -55,9 +56,14 @@ export interface LogoutAction{
     type: AuthActionTypes.LOGOUT
 }
 
+export interface CleanErrors{
+    type: AuthActionTypes.CLEAN_ERROR
+}
+
 export type AuthAction = 
     LoginAuthAction| 
     LoginAuthSuccesAction | 
     LoginAuthErrorAction |
-    LogoutAction
+    LogoutAction|
+    CleanErrors
     ;
