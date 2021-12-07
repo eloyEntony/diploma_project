@@ -18,24 +18,34 @@ export const loginUser = (data: ILoginVM) => async (dispatch: Dispatch<AuthActio
             console.log(response.data);
             
             const {token} = await response.data;
-            localStorage.setItem('token', JSON.stringify(token));
+            // localStorage.setItem('token', JSON.stringify(token));
+            localStorage.setItem('token', token);
             setUserFromToken(token, dispatch);
+            
             return Promise.resolve();
         }
         catch(error:any) {
-            dispatch({type: AuthActionTypes.LOGIN_AUTH_ERROR, 
-                payload: error.response?.data.message});
+            //console.log(error.response?.data);
+            
+            dispatch({type: AuthActionTypes.LOGIN_AUTH_ERROR, payload: error.response?.data});
                 // payload: (error as AxiosError).response?.data.message});
                 //console.log(error);
 
               
-            return Promise.reject();
+            //return Promise.reject();
         }
     }
 
 
 export const setUserFromToken = (token:string, dispatch: Dispatch<any>) =>{
     setAuthToken(token)
+
+    
+    // const _user = jwt.decode(token, {json: true})
+    
+    const tmp = localStorage.getItem('token')
+    console.log(tmp);
+    
     const _user = jwt.decode(token, {json: true})
 
     let _isAdmin = false;
@@ -46,6 +56,8 @@ export const setUserFromToken = (token:string, dispatch: Dispatch<any>) =>{
     //     let r = Object.values(role)
     //     if(r[0] == 'Admin') _isAdmin = true;
     // })
+    console.log(_user);
+    
     if(_user!.roles == 'Admin')
         _isAdmin=true
         

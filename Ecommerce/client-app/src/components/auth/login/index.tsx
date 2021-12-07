@@ -1,9 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { useActions } from '../../../hooks/useActions';
 import { ILoginVM } from '../../../types/auth';
 import { Button, Form  } from 'react-bootstrap'
 import { useFormik, FormikHelpers, Formik, Field, Form as F } from 'formik';
 import { loginValidationShema } from './validationSchema'
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import { Toast } from 'primereact/toast';
+
 
 const LoginPage: FC = () => {
 
@@ -23,19 +26,51 @@ const LoginPage: FC = () => {
         },
     });
 
-    const { loginUser } = useActions();
+    const { loginUser, cleanUserError } = useActions();
 
     const handlerSubmit = (values: ILoginVM, { setSubmitting, setErrors }: FormikHelpers<ILoginVM>
     ) => {
-        setTimeout(() => {
+        //setTimeout(() => {
             setSubmitting(false);
-        }, 500);
+        //}, 500);
          console.log("values", values);
         loginUser(values);
     };
 
+    
+    const { error } = useTypedSelector((redux) => redux.auth);
+    
+    useEffect(() => {
+        cleanUserError();
+    }, [error]);
+
+    const toast:any = useRef(null);
+
+    const showWarn = (error:string) => {
+        toast.current.show({severity:'warn', summary: 'Warn Message', detail: error, life: 3000});
+        //formik.setStatus("Bad")
+
+    }
+
+    
+
+    if(error?.errors!= null){
+       //console.log(error.errors.user);
+        let array = error.errors.user
+        array.map((e: any)=>{
+            console.log(e);   
+            //formik.errors.email = e       
+            //formik.values.email = ''   
+           showWarn(e);
+           
+        })
+        
+       //formik.setErrors({})
+    }
+
     return (
         <div className="container">
+            <Toast ref={toast} />
             <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <h1 className="text-center">LOGIN</h1>
