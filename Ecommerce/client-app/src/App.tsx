@@ -3,6 +3,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Products from './components/containers/adminLayout/components/products';
 import AdminHome from './components/containers/adminLayout/components/adminHome';
 import './App.css';
+import 'primeflex/primeflex.css';
 
 import AdminLayout from './components/containers/adminLayout/index'
 import DefaultLayout from './components/containers/defaultLayout/index'
@@ -18,6 +19,7 @@ import HomePage from './components/home';
 import ProductsList from './components/products';
 import { FormikFormDemo } from './components/auth/register/test';
 import LoginPage2 from './components/auth/login/index copy';
+import ProductEdit from './components/containers/adminLayout/components/productEdit';
 
 function App() {
 
@@ -29,6 +31,7 @@ function App() {
                 
               <Route path="/admin" element={<AdminLayout/>} >
                 <Route path="products" element={<Products/>} />
+                <Route path="product" element={<ProductEdit/>} />
                 <Route path="home" element={<AdminHome/>} />
                 <Route path="users" element={<Users/>} />
               </Route>  

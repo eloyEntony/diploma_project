@@ -22,6 +22,7 @@ const Header = () => {
         <Nav className="me-auto">
           <Link className="nav-link" to="/admin/home">Home</Link>
           <Link className="nav-link" to="/admin/products">Poducts</Link>
+          <Link className="nav-link" to="/admin/product">PoductsEdit</Link>
           <Link className="nav-link" to="/admin/users">Users</Link>
         </Nav>
         {isAuth ? ( 
